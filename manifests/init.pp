@@ -86,7 +86,9 @@ class mediawiki (
   $doc_root       = $mediawiki::params::doc_root,
   $tarball_url    = $mediawiki::params::tarball_url,
   $package_ensure = 'latest',
-  $max_memory     = '2048'
+  $max_memory     = '2048',
+  $manage_apache  = 'true',
+  $manage_mysql   = 'true'  
   ) inherits mediawiki::params {
 
   $web_dir = $mediawiki::params::web_dir
@@ -96,8 +98,6 @@ class mediawiki (
   $tarball_name             = regsubst($tarball_url, '^.*?/(mediawiki-\d\.\d+.*tar\.gz)$', '\1')
   $mediawiki_dir            = regsubst($tarball_url, '^.*?/(mediawiki-\d\.\d+\.\d+).*$', '\1')
   $mediawiki_install_path   = "${web_dir}/${mediawiki_dir}"
-  $manage_apache = 0
-  $manage_mysql  = 0  
 
   # Specify dependencies
   Class['mysql::server'] -> Class['mediawiki']
