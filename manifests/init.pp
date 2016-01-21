@@ -96,22 +96,26 @@ class mediawiki (
   $tarball_name             = regsubst($tarball_url, '^.*?/(mediawiki-\d\.\d+.*tar\.gz)$', '\1')
   $mediawiki_dir            = regsubst($tarball_url, '^.*?/(mediawiki-\d\.\d+\.\d+).*$', '\1')
   $mediawiki_install_path   = "${web_dir}/${mediawiki_dir}"
-  
+  $manage_apache = 0
+  $manage_mysql  = 0  
+
   # Specify dependencies
   Class['mysql::server'] -> Class['mediawiki']
   #Class['mysql::config'] -> Class['mediawiki']
   
-  class { 'apache': 
-    mpm_module => 'prefork',
+  if $manage_apache { 
+    class { 'apache': 
+      mpm_module => 'prefork',
+    }
+    class { 'apache::mod::php': }
   }
-  class { 'apache::mod::php': }
   
-  
-  # Manages the mysql server package and service by default
-  class { 'mysql::server':
-    root_password => $db_root_password,
+  # Manages the mysql server package and service if needed
+  if $manage_mysql {
+    class { 'mysql::server':
+      root_password => $db_root_password,
+    }
   }
-
   package { $mediawiki::params::packages:
     ensure  => $package_ensure,
   }
