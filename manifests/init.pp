@@ -87,8 +87,8 @@ class mediawiki (
   $tarball_url    = $mediawiki::params::tarball_url,
   $package_ensure = 'latest',
   $max_memory     = '2048',
-  $manage_apache  = 'true',
-  $manage_mysql   = 'true'  
+  $manage_apache  = true,
+  $manage_mysql   = true  
   ) inherits mediawiki::params {
 
   $web_dir = $mediawiki::params::web_dir
