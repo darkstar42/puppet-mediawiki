@@ -28,11 +28,11 @@
 define mediawiki::symlinks (
   $conf_dir,
   $install_files,
-  $target_dir
-  ) {
+  $target_dir,
+) {
   
   # Generate an array of symlink names
-  $link_files = regsubst($install_files, "^.*$", "${conf_dir}/${name}/\\0", "G")   
+  $link_files = regsubst($install_files, '^.*$', "${conf_dir}/${name}/\\0", 'G')
   mediawiki::files { $link_files:
     target_dir => $target_dir,
   }

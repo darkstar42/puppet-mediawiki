@@ -23,12 +23,12 @@
 #
 define mediawiki::files (
   $target_dir
-  ) {
+) {
   file { $name:
-    ensure  => link,
-    owner   => 'apache',
-    group   => 'apache',
-    mode    => '0755',
-    target  => gen_target_path($target_dir, $name),
+    ensure => link,
+    owner  => 'apache',
+    group  => 'apache',
+    mode   => '0755',
+    target => gen_target_path($target_dir, $name),
   }
 }
