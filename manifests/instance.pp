@@ -91,28 +91,28 @@ define mediawiki::instance (
 
   # Figure out how to improve db security (manually done by
   # mysql_secure_installation)
-  # case $ensure {
-  # 'present', 'absent': {
-  #   exec { "${name}-install_script":
-  #     cwd       => "${mediawiki_install_path}/maintenance",
-  #     command   => "/usr/bin/php install.php                   \
-  #                     --pass puppet05                          \
-  #                     --server http://${server_name}           \
-  #                     --scriptpath /${name}                    \
-  #                     --dbtype mysql                           \
-  #                     --dbserver localhost                     \
-  #                     --installdbuser root                     \
-  #                     --installdbpass ${db_root_password}      \
-  #                     --dbname ${db_name}                      \
-  #                     --dbuser ${db_user}                      \
-  #                     --dbpass ${db_password}                  \
-  #                     --dbprefix ${db_prefix}                  \
-  #                     --confpath ${mediawiki_conf_dir}/${name} \
-  #                     --lang en                                \
-  #                     ${name} admin",
-  #     creates   => "${mediawiki_conf_dir}/${name}/LocalSettings.php",
-  #     subscribe => File["${mediawiki_conf_dir}/${name}/images"],
-  #   }
+  case $ensure {
+    'present', 'absent': {
+      exec { "${name}-install_script":
+        cwd       => "${mediawiki_install_path}/maintenance",
+        command   => "/usr/bin/php install.php                   \
+                        --pass puppet05                          \
+                        --server http://${server_name}           \
+                        --scriptpath /${name}                    \
+                        --dbtype mysql                           \
+                        --dbserver localhost                     \
+                        --installdbuser root                     \
+                        --installdbpass ${db_root_password}      \
+                        --dbname ${db_name}                      \
+                        --dbuser ${db_user}                      \
+                        --dbpass ${db_password}                  \
+                        --dbprefix ${db_prefix}                  \
+                        --confpath ${mediawiki_conf_dir}/${name} \
+                        --lang en                                \
+                        ${name} admin",
+        creates   => "${mediawiki_conf_dir}/${name}/LocalSettings.php",
+        subscribe => File["${mediawiki_conf_dir}/${name}/images"],
+      }
 
       # Ensure resource attributes common to all resources
       File {
@@ -163,9 +163,7 @@ define mediawiki::instance (
       file { "${doc_root}/${name}":
         ensure  => link,
         target  => "${mediawiki_conf_dir}/${name}",
-        require => File [
-          "${mediawiki_conf_dir}/${name}"
-        ],
+        require => File["${mediawiki_conf_dir}/${name}"],
       }
 
       # Each instance has a separate vhost configuration
