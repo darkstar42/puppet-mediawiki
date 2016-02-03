@@ -54,6 +54,7 @@ class mediawiki::params {
     'thumb_handler.php5',
     'thumb.php',
     'thumb.php5',
+    'vendor',
     'wiki.phtml',
   ]
 
