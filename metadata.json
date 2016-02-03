@@ -1,8 +1,8 @@
 {
-  "name": "hexmode-mediawiki",
-  "version": "0.4.1",
-  "source": "git@github.com:hexmode/puppet-mediawiki.git",
-  "author": "Mark A. Hershberger",
+  "name": "MiamiOH-mediawiki",
+  "version": "3.0.0",
+  "source": "git@github.com:MiamiOH/puppet-mediawiki.git",
+  "author": "Andrew Farler",
   "license": "GPLv3",
   "summary": "Puppet module for single and multi-tenant Mediawiki installation.",
   "project_page": "https://github.com/hexmode/puppet-mediawiki",

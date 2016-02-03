@@ -23,7 +23,6 @@ class mediawiki::params {
 
   $tarball_url        = 'https://releases.wikimedia.org/mediawiki/1.26/mediawiki-1.26.2.tar.gz'
   $conf_dir           = '/etc/mediawiki'
-  $apache_daemon      = '/usr/sbin/httpd'
   $installation_files = [
     'api.php',
     'api.php5',

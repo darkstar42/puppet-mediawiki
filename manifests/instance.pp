@@ -75,7 +75,6 @@ define mediawiki::instance (
   $mediawiki_install_path  = $mediawiki::mediawiki_install_path
   $mediawiki_conf_dir      = $mediawiki::params::conf_dir
   $mediawiki_install_files = $mediawiki::params::installation_files
-  $apache_daemon           = $mediawiki::params::apache_daemon
 
   if $external_smtp {
     if ! $smtp_idhost   { fail("'smtp_idhost' required when 'external_smtp' is true.") }

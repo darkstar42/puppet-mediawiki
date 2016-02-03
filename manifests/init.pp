@@ -99,7 +99,7 @@ class mediawiki (
   # Download and install MediaWiki from a tarball
   exec { 'get-mediawiki':
     cwd       => $web_dir,
-    command   => "/usr/bin/curl ${proxy_include} -O ${tarball_url}",
+    command   => "/usr/bin/curl ${proxy_include} -L -O ${tarball_url}",
     creates   => "${web_dir}/${tarball_name}",
     subscribe => File['mediawiki_conf_dir'],
   }
