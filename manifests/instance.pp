@@ -45,6 +45,7 @@ define mediawiki::instance (
   $ip                     = '*',
   $port                   = '80',
   $sslport                = '443',
+  $redirect_to_ssl        = false,
   $server_aliases         = undef,
   $ensure                 = 'present',
   $allow_html_email       = false,
@@ -167,26 +168,44 @@ define mediawiki::instance (
       }
 
       # Each instance has a separate vhost configuration
-      apache::vhost { $name:
-        ensure        => $ensure,
-        port          => $port,
-        docroot       => $doc_root,
-        serveradmin   => $admin_email,
-        servername    => $server_name,
-        vhost_name    => $ip,
-        serveraliases => $server_aliases,
+
+      if $port {
+        if $redirect_to_ssl {
+          apache::vhost { $name:
+            ensure          => $ensure,
+            port            => $port,
+            docroot         => $doc_root,
+            serveradmin     => $admin_email,
+            servername      => $server_name,
+            vhost_name      => $ip,
+            serveraliases   => $server_aliases,
+            redirect_status => 'permanent',
+            redirect_dest   => "https://${servername}/",
+          }
+        } else {
+          apache::vhost { $name:
+            ensure        => $ensure,
+            port          => $port,
+            docroot       => $doc_root,
+            serveradmin   => $admin_email,
+            servername    => $server_name,
+            vhost_name    => $ip,
+            serveraliases => $server_aliases,
+          }
+        }
       }
 
-      # Add an https vhost as well
-      apache::vhost { "${name}-ssl":
-        ensure        => $ensure,
-        port          => $sslport,
-        docroot       => $doc_root,
-        serveradmin   => $admin_email,
-        servername    => $server_name,
-        vhost_name    => $ip,
-        serveraliases => $server_aliases,
-        ssl           => true,
+      if $sslport {
+        apache::vhost { "${name}-ssl":
+          ensure        => $ensure,
+          port          => $sslport,
+          docroot       => $doc_root,
+          serveradmin   => $admin_email,
+          servername    => $server_name,
+          vhost_name    => $ip,
+          serveraliases => $server_aliases,
+          ssl           => true,
+        }
       }
     }
     'deleted': {
