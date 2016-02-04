@@ -1,6 +1,6 @@
 {
   "name": "MiamiOH-mediawiki",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "source": "git@github.com:MiamiOH/puppet-mediawiki.git",
   "author": "Andrew Farler",
   "license": "GPLv3",
