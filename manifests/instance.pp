@@ -58,6 +58,7 @@ define mediawiki::instance (
   $smtp_auth              = undef,
   $smtp_username          = undef,
   $smtp_password          = undef,
+  $apache_user            = $mediawiki::params::apache_user,
 ) {
 
   validate_re($ensure, '^(present|absent|deleted)$',
@@ -118,8 +119,8 @@ define mediawiki::instance (
       # Ensure resource attributes common to all resources
       File {
         ensure => directory,
-        owner  => 'apache',
-        group  => 'apache',
+        owner  => $apache_user,
+        group  => $apache_user,
         mode   => '0755',
       }
 
@@ -143,14 +144,9 @@ define mediawiki::instance (
       }
 
       # Each instance needs a separate folder to upload images
-      $os_group = $::operatingsystem ? {
-        /(?i)(redhat|centos)/ => 'apache',
-        /(?i)(debian|ubuntu)/ => 'www-data',
-        default               => undef,
-      }
       file { "${mediawiki_conf_dir}/${name}/images":
         ensure => directory,
-        group  => $os_group,
+        group  => $apache_user,
       }
 
       # Ensure that mediawiki configuration files are included in each instance.
