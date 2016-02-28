@@ -49,6 +49,7 @@ class mediawiki (
   $max_memory     = '2048',
   $manage_apache  = true,
   $manage_mysql   = true,
+  $apache_user    = $mediawiki::params::apache_user,
 ) inherits mediawiki::params {
 
   $web_dir = $mediawiki::params::web_dir
@@ -90,8 +91,8 @@ class mediawiki (
   file { 'mediawiki_conf_dir':
     ensure  => 'directory',
     path    => $mediawiki::params::conf_dir,
-    owner   => 'apache',
-    group   => 'apache',
+    owner   => $apache_user,
+    group   => $apache_user,
     mode    => '0755',
     require => Package[$mediawiki::params::packages],
   }
