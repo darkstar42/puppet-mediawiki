@@ -49,7 +49,7 @@ define mediawiki::instance (
   $server_aliases         = undef,
   $ensure                 = 'present',
   $allow_html_email       = false,
-  $additional_mail_params = 'none',
+  $additional_mail_params = 'null',
   $logo_url               = false,
   $external_smtp          = false,
   $smtp_idhost            = undef,
@@ -124,12 +124,25 @@ define mediawiki::instance (
         mode   => '0755',
       }
 
+      $settings = "${mediawiki_conf_dir}/${name}/LocalSettings.php"
+
+      file { 'mediawiki_extension_conf_dir':
+        ensure => 'directory',
+        path   => "${mediawiki_conf_dir}/${name}/conf.d",
+        require => File['mediawiki_conf_dir'],
+      }
+
       # MediaWIki Custom Logo
       if $logo_url {
         file_line { "${name}_logo_url":
           path => "${mediawiki_conf_dir}/${name}/LocalSettings.php",
           line => "\$wgLogo = '${logo_url}';",
         }
+      }
+
+      file_line { "${name}_extensions":
+        path => "${mediawiki_conf_dir}/${name}/LocalSettings.php",
+        line => "foreach (glob('${mediawiki_conf_dir}/${name}/conf.d/*.php') as \$filename) { require_once \$filename; }",
       }
 
       # MediaWiki instance directory
