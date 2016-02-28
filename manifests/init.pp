@@ -41,15 +41,16 @@ class mediawiki (
   $server_name,
   $admin_email,
   $db_root_password,
-  $doc_root       = $mediawiki::params::doc_root,
-  $proxy          = undef,
-  $proxy_url      = undef,
-  $tarball_url    = $mediawiki::params::tarball_url,
-  $package_ensure = 'latest',
-  $max_memory     = '2048',
-  $manage_apache  = true,
-  $manage_mysql   = true,
-  $apache_user    = $mediawiki::params::apache_user,
+  $doc_root         = $mediawiki::params::doc_root,
+  $proxy            = undef,
+  $proxy_url        = undef,
+  $tarball_url      = $mediawiki::params::tarball_url,
+  $package_ensure   = 'latest',
+  $max_memory       = '2048',
+  $manage_apache    = true,
+  $manage_mysql     = true,
+  $manage_memcached = true,
+  $apache_user      = $mediawiki::params::apache_user,
 ) inherits mediawiki::params {
 
   $web_dir = $mediawiki::params::web_dir
@@ -112,8 +113,10 @@ class mediawiki (
     subscribe => Exec['get-mediawiki'],
   }
 
-  class { '::memcached':
-    max_memory      => $max_memory,
-    max_connections => '1024',
+  if $manage_memcached {
+    class { '::memcached':
+      max_memory      => $max_memory,
+      max_connections => '1024',
+    }
   }
 }
